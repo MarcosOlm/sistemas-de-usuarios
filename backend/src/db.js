@@ -4,13 +4,6 @@ const mysql = require("mysql2/promise");
 // connection with MySql
 let connection;
 
-console.log("ENV FROM DB.JS:", {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  pass: process.env.DB_PASSWORD,
-  db: process.env.DB_NAME
-});
-
 async function connect() {
   if (!connection) {
     connection = await mysql.createConnection({
