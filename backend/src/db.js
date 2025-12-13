@@ -1,5 +1,6 @@
 require('dotenv').config();
 const mysql = require("mysql2/promise");
+const jwt = require('jsonwebtoken');
 
 // connection with MySql
 let connection;
@@ -14,6 +15,58 @@ async function connect() {
     });
   }
   return connection;
+}
+
+// endpoint CRUD
+
+async function loginUser(email, password) {
+  const conn = await connect();
+  const [hasEmail] = await conn.query(`SELECT * FROM usuarios WHERE email = '${email}'`)
+  if(!hasEmail.length) {
+    return {
+      status: false,
+      message: "usuário não cadastrado",
+    };
+  }
+  const user = hasEmail[0]
+  if (user.password != password) {
+    return {
+      status: false,
+      message: "senha incorreta!",
+    };
+  }
+  const token = jwt.sign(
+    {id: user.idUser},
+    process.env.JWT_PASSWORD,
+  )
+  return {
+      status: true,
+      message: "usuário encontrado",
+      token: token
+    };
+}
+
+async function createUser(name, email, password) {
+  try {
+    const conn = await connect();
+    const [noEmail] = await conn.query(`SELECT email FROM usuarios WHERE email = '${email}'`)
+    if (!noEmail.length) {
+      await conn.query(
+        "INSERT INTO usuarios (name, email, password) VALUES (?, ?, ?)",
+        [name, email, password]
+      );
+      return {
+        status: true,
+        message: "usuário cadastrado com sucesso",
+      };
+    }
+    return {
+        status: false,
+        message: "email já cadastrado. Tente fazer login!",
+      };
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function getUsers() {
@@ -43,22 +96,6 @@ async function getUserById(idUser) {
       status: true,
       message: "usuário encontrado",
       user: row,
-    };
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-async function createUser(name, email, password) {
-  try {
-    const conn = await connect();
-    await conn.query(
-      "INSERT INTO usuarios (name, email, password) VALUES (?, ?, ?)",
-      [name, email, password]
-    );
-    return {
-      status: true,
-      message: "usuário cadastrado com sucesso",
     };
   } catch (err) {
     console.log(err);
@@ -118,4 +155,5 @@ module.exports = {
   createUser,
   deleteUser,
   updateUser,
+  loginUser
 };
