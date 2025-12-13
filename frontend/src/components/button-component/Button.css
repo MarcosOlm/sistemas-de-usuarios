@@ -1,0 +1,28 @@
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    border: none;
+}
+
+img {
+    height: 17px;
+    background-color: transparent;
+}
+
+.primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+}
+
+.secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+}
+
+.muted {
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+}

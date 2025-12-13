@@ -1,0 +1,31 @@
+label {
+    display: block;
+}
+
+.input-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.input-wrap img {
+    position: absolute;
+    height: 20px;
+    top: 21%;
+    left: 10px;
+    background-color: transparent;
+}
+
+input {
+    width: 100%;
+    height: 2.2rem;
+    padding-left: 2.8em;
+    padding-right: 1em;
+    border: 1px solid var(--input);
+    border-radius: 12px;
+    background-color: var(--secondary);
+}
+
+input:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
