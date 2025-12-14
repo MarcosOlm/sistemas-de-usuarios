@@ -20,8 +20,15 @@ async function connect() {
 // endpoint CRUD
 
 async function loginUser(email, password) {
+  // {
+  //   email: 'marcos@email.com',
+  //   password: 'marcos123',
+  // };
+
   const conn = await connect();
-  const [hasEmail] = await conn.query(`SELECT * FROM usuarios WHERE email = '${email}'`)
+  const [hasEmail] = await conn.query(`SELECT * FROM usuarios WHERE email = ?`,
+    [email]
+  )
   if(!hasEmail.length) {
     return {
       status: false,
@@ -36,7 +43,7 @@ async function loginUser(email, password) {
     };
   }
   const token = jwt.sign(
-    {id: user.idUser},
+    {idUser: user.idUser},
     process.env.JWT_PASSWORD,
   )
   return {
@@ -47,9 +54,17 @@ async function loginUser(email, password) {
 }
 
 async function createUser(name, email, password) {
+  // {
+  //   name: 'marcos',
+  //   email: 'marcos@email.com',
+  //   password: 'marcos123',
+  // };
+
   try {
     const conn = await connect();
-    const [noEmail] = await conn.query(`SELECT email FROM usuarios WHERE email = '${email}'`)
+    const [noEmail] = await conn.query(`SELECT email FROM usuarios WHERE email = ?`,
+      [email]
+    )
     if (!noEmail.length) {
       await conn.query(
         "INSERT INTO usuarios (name, email, password) VALUES (?, ?, ?)",
@@ -115,18 +130,19 @@ async function deleteUser(idUser) {
   }
 }
 
-async function updateUser(field) {
+async function updateUser(field, idUser) {
   // {
-  //   idUser: 1,
   //   name: 'marcos',
   //   email: 'marcos@email.com',
-  //   telephone: "83900000000",
+  //   password: 'marcos123',
+  //   telephone: "99900000000",
   // };
 
   try {
     const conn = await connect();
     await conn.query(
-      `UPDATE usuarios SET ${checkField(field)} WHERE idUser = ${field.idUser}`
+      `UPDATE usuarios SET ${checkField(field)} WHERE idUser = ?`,
+      [idUser]
     );
     return {
       status: true,
@@ -143,9 +159,7 @@ function checkField(field, index=0, query=[]) {
   if (Object.entries(field).length == index) {
     return query
   }
-  if (Object.keys(field).at(index) != 'idUser') {
-    query.push(`${Object.keys(field).at(index)} = '${Object.values(field).at(index)}'`)
-  }
+  query.push(`${Object.keys(field).at(index)} = '${Object.values(field).at(index)}'`)
   return checkField(field, index+1, query);
 }
 

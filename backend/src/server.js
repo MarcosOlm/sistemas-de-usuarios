@@ -1,5 +1,6 @@
 const port = 5000;
 require('dotenv').config();
+const authMiddleware = require("./middleware.js");
 const cors = require('cors')
 const express = require('express')
 const app = express()
@@ -28,7 +29,7 @@ app.post('/registration', async (req, res) => {
     }
 })
 
-app.get('/user', async (req, res) => {
+app.get('/allUser', authMiddleware, async (req, res) => {
     try {
         res.send(await db.getUsers());
     }
@@ -37,27 +38,27 @@ app.get('/user', async (req, res) => {
     }
 })
 
-app.get('/user/:id', async (req, res) => {
+app.get('/user', authMiddleware, async (req, res) => {
     try {
-        res.send(await db.getUserById(req.params.id));
+        res.send(await db.getUserById(req.idUser));
     }
     catch (err) {
         console.log(err);
     }
 })
 
-app.delete('/user/:id', async (req, res) => {
+app.delete('/user', authMiddleware, async (req, res) => {
     try {
-        res.send(await db.deleteUser(req.params.id));
+        res.send(await db.deleteUser(req.idUser));
     }
     catch (err) {
         console.log(err)
     }
 })
 
-app.put('/user', async (req, res) => {
+app.put('/user', authMiddleware, async (req, res) => {
     try {
-        res.send(await db.updateUser(req.body));
+        res.send(await db.updateUser(req.body, req.idUser));
     }
     catch (err) {
         console.log(err)
