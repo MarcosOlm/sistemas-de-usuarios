@@ -1,8 +1,10 @@
-const port = 5000;
 require('dotenv').config();
 const authMiddleware = require("./middleware.js");
-const cors = require('cors')
+const bcrypt = require('bcrypt');
+
+const port = 5000;
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const db = require('./db.js')
 
@@ -22,7 +24,8 @@ app.post('/login', async (req, res) => {
 app.post('/registration', async (req, res) => {
     try {
         const {name, email, password} = req.body
-        res.send(await db.createUser(name, email, password));
+        const cryptPassword = await bcrypt.hash(password, 10);
+        res.send(await db.createUser(name, email, cryptPassword));
     }
     catch (err) {
         console.log(err)

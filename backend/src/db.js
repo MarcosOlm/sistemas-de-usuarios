@@ -1,6 +1,7 @@
 require('dotenv').config();
 const mysql = require("mysql2/promise");
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt')
 
 // connection with MySql
 let connection;
@@ -36,7 +37,8 @@ async function loginUser(email, password) {
     };
   }
   const user = hasEmail[0]
-  if (user.password != password) {
+  const valid = await bcrypt.compare(password, user.password)
+  if (!valid) {
     return {
       status: false,
       message: "senha incorreta!",
@@ -110,7 +112,7 @@ async function getUserById(idUser) {
     return {
       status: true,
       message: "usuário encontrado",
-      user: row,
+      user: row[0],
     };
   } catch (err) {
     console.log(err);
