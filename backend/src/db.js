@@ -50,7 +50,6 @@ async function loginUser(email, password) {
   )
   return {
       status: true,
-      message: "usuário encontrado",
       token: token
     };
 }
