@@ -27,7 +27,7 @@
 
 /* form section */
 
-form {
+.form-post {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -39,7 +39,7 @@ form {
   box-shadow: 0 0 30px 1px var(--border);
 }
 
-form h1 {
+.form-post h1 {
   font-size: 1.5rem;
   font-weight: 600;
 }

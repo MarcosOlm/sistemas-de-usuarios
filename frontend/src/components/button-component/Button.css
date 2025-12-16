@@ -5,10 +5,15 @@ button {
     gap: 4px;
     width: 100%;
     border: none;
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: auto;
 }
 
 img {
-    height: 17px;
+    height: 1em;
     background-color: transparent;
 }
 

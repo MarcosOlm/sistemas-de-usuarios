@@ -1,6 +1,8 @@
+import "./LoginRegistration.css";
 import Button from "../../components/button-component/Button";
 import Input from "../../components/input-component/Input";
-import "./LoginRegistration.css";
+import userService from "../../services/useService";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -11,15 +13,48 @@ type FormData = {
 };
 
 const LoginRegistration = () => {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+  const navigate = useNavigate();
 
-  function onSubmit(data: FormData) {
-    console.log(data);
+  function submit(data: FormData) {
+    setIsLoading(true);
+
+    async function submitLogin() {
+      const login = await userService.loginUser(data);
+      return login;
+    }
+    async function submitCreate() {
+      const create = await userService.createUser(data);
+      return create;
+    }
+
+    if (isLogin) {
+      submitLogin().then((res) => {
+        if (res.data.status) {
+          navigate('/');
+        } else {
+          alert("Não foi possível entrar. Tente novamente!");
+          setIsLoading(false);
+        }
+      });
+    }
+    if (!isLogin) {
+      submitCreate().then((res) => {
+        if (res.data.status) {
+          alert("Cadastro criado. Tente fazer login!");
+          setIsLoading(false);
+          setIsLogin(true);
+        } else {
+          console.log(res.data.massage)
+        }
+      });
+    }
   }
 
   return (
@@ -31,7 +66,7 @@ const LoginRegistration = () => {
           <p>Gerencie seus usuários com facilidade</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(submit)} className="form-post">
           <div className="btn-wrap">
             <Button
               text={"Entrar"}
@@ -128,7 +163,14 @@ const LoginRegistration = () => {
             </div>
             <Button
               type="submit"
-              text={isLogin ? "Entrar" : "Cadastrar"}
+              text={
+                !isLoading
+                  ? isLogin
+                    ? "Entrar"
+                    : "Cadastrar"
+                  : "Carregando..."
+              }
+              disabled={isLoading}
               bgColor="primary"
               style={{
                 alignSelf: "center",
