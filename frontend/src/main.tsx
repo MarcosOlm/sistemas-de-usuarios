@@ -4,20 +4,20 @@ import { createRoot } from 'react-dom/client'
 import {
   createBrowserRouter,
   RouterProvider,
-} from "react-router";
+} from "react-router-dom";
 import App from './App.tsx'
 import LoginRegistration from './pages/login-registration/LoginRegistration.tsx';
 
 let router = createBrowserRouter([
   {
     path: "/",
-    Component: App
+    element: <App />
   },
   {
     path: "/login-registration",
-    Component: LoginRegistration
+    element: <LoginRegistration />
   }
-]);
+]); 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
