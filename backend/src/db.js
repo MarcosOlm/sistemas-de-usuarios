@@ -160,7 +160,9 @@ function checkField(field, index=0, query=[]) {
   if (Object.entries(field).length == index) {
     return query
   }
-  query.push(`${Object.keys(field).at(index)} = '${Object.values(field).at(index)}'`)
+  if (Object.values(field).at(index).length > 0) {
+    query.push(`${Object.keys(field).at(index)} = '${Object.values(field).at(index)}'`)
+  }
   return checkField(field, index+1, query);
 }
 
