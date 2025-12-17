@@ -3,7 +3,7 @@ import Button from "../../components/button-component/Button";
 import Header from "../../components/header-component/Header";
 import Input from "../../components/input-component/Input";
 import "./Home.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import userService from "../../services/useService";
 
 type FormData = {
@@ -13,14 +13,29 @@ type FormData = {
 };
 
 const Home = () => {
+  // get users
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [users, setUsers] = useState<FormData[]>([]);
+
+  useEffect(() => {
+    async function getAll() {
+      return await userService.getAllUsers();
+    }
+
+    getAll().then((res) => {
+      if (res.data.status && res.data.users) {
+        setUsers(res.data.users)
+      }
+    })
+  }, [isLoading])
+
+  // submit
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<FormData>();
-
   const values = watch();
   const hasContent = Object.values(values).some(
     (value) => value && value.trim() !== ""
@@ -137,24 +152,14 @@ const Home = () => {
         </form>
         <section>
           <h2>Usuários Cadastrados</h2>
-          <article className="user">
+          {users.map((user, index) => (
+          <article className="user" key={index} >
             <div className="letter">G</div>
-            <div className="name">👤goat</div>
-            <div className="email">📩marcoslimado12384@email.com</div>
-            <div className="telephone">📞 Cadastre um telefone</div>
+            <div className="name">👤 {user.name} </div>
+            <div className="email">📩 {user.email} </div>
+            <div className="telephone">📞 {user.telephone || 'telefone não cadastrado'} </div>
           </article>
-          <article className="user">
-            <div className="letter">G</div>
-            <div className="name">👤 goat</div>
-            <div className="email">📩 goat@email.com</div>
-            <div className="telephone">📞 83988778877</div>
-          </article>
-          <article className="user">
-            <div className="letter">G</div>
-            <div className="name">👤goat</div>
-            <div className="email">📩goat@email.com</div>
-            <div className="telephone">📞 Cadastre um telefone</div>
-          </article>
+          ))}
         </section>
       </main>
     </>

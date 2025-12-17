@@ -39,7 +39,6 @@ article {
   border-bottom: 1px solid #ccc;
   padding-bottom: 1em;
 }
-
 .letter {
   display: flex;
   align-items: center;
@@ -69,7 +68,13 @@ article {
   grid-row: 2 / 3;
 }
 
-@media screen and (max-width: 58em) {
+@media screen and (max-width: 71em) {
+  main {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 62em) {
   main {
     flex-direction: column;
     padding: 1em;
@@ -84,7 +89,7 @@ article {
   }
 }
 
-@media screen and (max-width: 31em) {
+@media screen and (max-width: 35em) {
   article {
     grid-template-columns: 5em 1fr;
     grid-template-rows: repeat(3, 1fr);
@@ -97,5 +102,11 @@ article {
   .telephone {
     grid-column: 2 / 3;
     grid-row: 3 / 4;
+  }
+}
+
+@media screen and (max-width: 25em) {
+  main {
+    font-size: 12px;
   }
 }

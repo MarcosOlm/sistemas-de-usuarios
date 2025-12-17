@@ -10,6 +10,8 @@ interface FormData {
 interface reqResponse {
     status: boolean,
     massage: string,
+    user?: FormData,
+    users?: FormData[],
 }
 
 const userService = {
