@@ -17,6 +17,29 @@ main {
   border: 1px solid var(--border);
   box-shadow: 0px 8px 10px -5px #ccc;
   border-radius: 12px;
+  animation: toTop .5s ease-in-out 0s 1;
+}
+
+.popover {
+  width: 40vw;
+  height: 22vh;
+  margin: auto;
+  padding: .4em 1em 1em;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.popover h2 {
+  margin: 1.2em 0;
+}
+
+.btn-warp {
+  display: flex;
+  gap: .5em;
+}
+
+.btn-warp * {
+  margin-top: auto;
 }
 
 /* users */
@@ -27,6 +50,7 @@ section {
   border: 1px solid var(--border);
   box-shadow: 0px 8px 10px -5px #ccc;
   border-radius: 12px;
+  animation: toTop .5s ease-in-out 0s 1;
 }
 
 article {
@@ -67,6 +91,22 @@ article {
   grid-column: 3 / 4;
   grid-row: 2 / 3;
 }
+
+/* animation */
+
+@keyframes toTop {
+  from {
+    transform: translateY(4em);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Home responsive */
 
 @media screen and (max-width: 71em) {
   main {

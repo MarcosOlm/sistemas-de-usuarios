@@ -27,33 +27,30 @@ const LoginRegistration = () => {
 
     async function submitLogin() {
       const login = await userService.loginUser(data);
-      return login;
-    }
-    async function submitCreate() {
-      const create = await userService.createUser(data);
-      return create;
-    }
-
-    if (isLogin) {
-      submitLogin().then((res) => {
-        if (res.data.status) {
+      if (login.data.status) {
           navigate('/');
         } else {
           alert("Não foi possível entrar. Tente novamente!");
           setIsLoading(false);
         }
-      });
     }
-    if (!isLogin) {
-      submitCreate().then((res) => {
-        if (res.data.status) {
+    async function submitCreate() {
+      const create = await userService.createUser(data);
+      if (create.data.status) {
           alert("Cadastro criado. Tente fazer login!");
           setIsLoading(false);
           setIsLogin(true);
         } else {
-          console.log(res.data.massage)
+          alert("Não foi possível criar o cadastro");
         }
-      });
+      return create;
+    }
+
+    if (isLogin) {
+      submitLogin()
+    }
+    if (!isLogin) {
+      submitCreate()
     }
   }
 

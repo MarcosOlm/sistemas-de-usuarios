@@ -24,10 +24,10 @@ const Home = () => {
 
     getAll().then((res) => {
       if (res.data.status && res.data.users) {
-        setUsers(res.data.users)
+        setUsers(res.data.users);
       }
-    })
-  }, [isLoading])
+    });
+  }, [isLoading]);
 
   // submit
   const {
@@ -45,16 +45,13 @@ const Home = () => {
     async function updateUser() {
       setIsLoading(true);
       const test = await userService.updateUser(data);
-      return test;
+      if (test.data.status) {
+        alert("Dados alterados com sucesso");
+      }
+      setIsLoading(false);
     }
 
-    updateUser()
-      .then((res) => {
-        if (res.data.status) {
-          alert("Dados alterados com sucesso");
-        }
-      })
-      .finally(() => setIsLoading(false));
+    updateUser();
   }
 
   return (
@@ -140,7 +137,8 @@ const Home = () => {
               text={isLoading ? "salvando alteralções" : "salvar alterações"}
               bgColor="primary"
               disabled={!hasContent || isLoading}
-              type="submit"
+              type="button"
+              popoverTarget="popover-btn"
               style={{
                 alignSelf: "center",
                 height: "2rem",
@@ -149,16 +147,49 @@ const Home = () => {
               }}
             />
           </div>
+
+          {/* popover */}
+          <div className="popover" id="popover-btn" popover="manual">
+            <Button
+              text="X"
+              bgColor="secondary"
+              type="button"
+              popoverTarget="popover-btn"
+              style={{ width: "2.5em", marginLeft: "auto" }}
+            />
+            <h2>você deseja alterar?</h2>
+            <div className="btn-warp">
+              <Button
+                text="sim"
+                bgColor="primary"
+                type="submit"
+                style={{ borderRadius: "6px", height: "2em"}}
+              />
+              <Button
+                text="não"
+                bgColor="muted"
+                type="button"
+                popoverTarget="popover-btn"
+                style={{ borderRadius: "6px", height: "2em" }}
+              />
+            </div>
+          </div>
         </form>
+
+        {/* users */}
         <section>
           <h2>Usuários Cadastrados</h2>
           {users.map((user, index) => (
-          <article className="user" key={index} >
-            <div className="letter">G</div>
-            <div className="name">👤 {user.name} </div>
-            <div className="email">📩 {user.email} </div>
-            <div className="telephone">📞 {user.telephone || 'telefone não cadastrado'} </div>
-          </article>
+            <article className="user" key={index}>
+              <div className="letter">
+                {user.name?.charAt(0).toLocaleUpperCase()}
+              </div>
+              <div className="name">👤 {user.name} </div>
+              <div className="email">📩 {user.email} </div>
+              <div className="telephone">
+                📞 {user.telephone || "telefone não cadastrado"}{" "}
+              </div>
+            </article>
           ))}
         </section>
       </main>
