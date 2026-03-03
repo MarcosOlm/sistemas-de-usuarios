@@ -17,7 +17,7 @@ A autenticação é realizada por meio de **tokens JWT armazenados em cookies HT
 ## ⚙️ Instalação Frontend (Vite)
 
 ```bash
-npm install react-hook-form react-router axios
+npm install
 ```
 
 ```bash
@@ -26,7 +26,7 @@ npm run dev
 ## ⚙️ Instalação BackEnd em Node.js
 
 ```bash
-npm install express cors cookie-parser bcrypt mysql2 jsonwebtoken dotenv
+npm install
 ```
 
 ### .env
